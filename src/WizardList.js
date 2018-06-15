@@ -2,8 +2,11 @@ import React from "react";
 import Wizard from "./Wizard";
 
 const WizardList = props => {
-  //display all yer wizards, or filter by house
-  return <div className="WizardList">Yer not a wizard yet, Harry</div>;
+    const students = props.students.map(student => {
+    const name = student.name;
+    <Wizard {name} />
+  });
+  return <div className="WizardList">{students}</div>;
 };
 
 export default WizardList;
