@@ -44,7 +44,7 @@ class App extends Component {
       <div className="App">
         <h2>Harry Potter Fan Fiction Story Creator</h2>
         <StorySettings onClickHandler={this.changeHouse} handleSubmit={this.newStudentSubmit} />
-        <WizardList students={this.state.students} />
+        <WizardList students={this.state.students} currentHouse={this.state.currentHouse} />
       </div>
     );
   }
