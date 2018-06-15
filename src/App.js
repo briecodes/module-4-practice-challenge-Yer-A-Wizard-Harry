@@ -5,47 +5,46 @@ import WizardList from "./WizardList";
 import "./App.css";
 
 class App extends Component {
-  constructor(){
-    super()
 
-    this.state={
-      wizards: [],
-      currentHouse: 'All'
-    }
-  }
+  state = {
+    students: [],
+    currentHouse: 'All'
+  };
 
-  componentDidMount(){
-    fetch("http://hp-api.herokuapp.com/api/characters/students")
-    .then(response => response.json())
-    .then(res => this.setState({
-      wizards: res
-    }))
-  }
+  componentDidMount() {
+    this.fetchStudents();
+  };
 
-  changeHouse = (event) => {   
-    const currentHouse = event.target.value
+  fetchStudents = () => {
+    fetch('http://hp-api.herokuapp.com/api/characters/students')
+      .then(response => response.json())
+      .then(students => {
+        this.setState({
+          students
+        });
+      });
+  };
+
+  newStudentSubmit = (e) => {
+    e.preventDefault();
+    const newStudent = {name: e.target.newWizard.value, house: e.target.newWizardHouse.value}
     this.setState({
-      currentHouse
-    })
-  }
+      students: [...this.state.students, newStudent]
+    });
+  };
 
-  handleSubmit = (event) => {
-    event.preventDefault()
-    const newWizard = event.target.newWizard.value
-    const newHouse = event.target.newWizardHouse.value
-    const newWizardObject = {name: newWizard, house: newHouse}
-
+  changeHouse = (e) => {
     this.setState({
-      wizards: [...this.state.wizards, newWizardObject]
-    })
-  }
+      currentHouse: e.target.value
+    });
+  };
 
   render() {
     return (
       <div className="App">
         <h2>Harry Potter Fan Fiction Story Creator</h2>
-        <StorySettings changeHouse={this.changeHouse} handleSubmit={this.handleSubmit}/>
-        <WizardList wizards={this.state.wizards} house={this.state.currentHouse}/>
+        <StorySettings onClickHandler={this.changeHouse} handleSubmit={this.newStudentSubmit} />
+        <WizardList students={this.state.students} currentHouse={this.state.currentHouse} />
       </div>
     );
   }
