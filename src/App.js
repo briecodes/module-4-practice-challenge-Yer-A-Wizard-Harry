@@ -5,16 +5,47 @@ import WizardList from "./WizardList";
 import "./App.css";
 
 class App extends Component {
-  //Start your coding here!
-  //Don't be afraid to add props into the provided components
+  constructor(){
+    super()
+
+    this.state={
+      wizards: [],
+      currentHouse: 'All'
+    }
+  }
+
+  componentDidMount(){
+    fetch("http://hp-api.herokuapp.com/api/characters/students")
+    .then(response => response.json())
+    .then(res => this.setState({
+      wizards: res
+    }))
+  }
+
+  changeHouse = (event) => {   
+    const currentHouse = event.target.value
+    this.setState({
+      currentHouse
+    })
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault()
+    const newWizard = event.target.newWizard.value
+    const newHouse = event.target.newWizardHouse.value
+    const newWizardObject = {name: newWizard, house: newHouse}
+
+    this.setState({
+      wizards: [...this.state.wizards, newWizardObject]
+    })
+  }
 
   render() {
-    console.log(this.state);
     return (
       <div className="App">
         <h2>Harry Potter Fan Fiction Story Creator</h2>
-        <StorySettings />
-        <WizardList />
+        <StorySettings changeHouse={this.changeHouse} handleSubmit={this.handleSubmit}/>
+        <WizardList wizards={this.state.wizards} house={this.state.currentHouse}/>
       </div>
     );
   }
